@@ -1,0 +1,31 @@
+package main.java.com.airtribe.meditrack.service;
+
+import main.java.com.airtribe.meditrack.Interface.Searchable;
+import main.java.com.airtribe.meditrack.entity.Patient;
+import main.java.com.airtribe.meditrack.util.DataStore;
+
+public class PatientService implements Searchable<Patient> {
+    private final DataStore<Patient> store = new DataStore<>();
+
+    // CREATE
+    public void addPatient(Patient patient) {
+        store.add(patient);
+    }
+
+    // READ (ALL)
+    public void viewPatients() {
+        store.getAll().forEach(p -> System.out.println(p.getSummary()));
+    }
+
+    // SEARCH (Polymorphism via interface)
+    @Override
+    public Patient searchById(String id) {
+        for (Patient p : store.getAll()) {
+            if (p.getId().equals(id)) {
+                return p;
+            }
+        }
+        notFoundMessage();
+        return null;
+    }
+}
